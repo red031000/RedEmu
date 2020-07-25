@@ -1,5 +1,5 @@
 /*
- *  RedEmu - main.c
+ *  RedEmu - events.h
  *  Copyright (C) 2020 red031000
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,41 +16,23 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef REDEMU_EVENTS_H
+#define REDEMU_EVENTS_H
+
+#include <stdint.h>
 #include "types.h"
-#include "events.h"
-#include "GFX/GFX_init.h"
-#include <stdio.h>
 
-#define SDL_QUIT 0x100 //can't include SDL.h here, breaks main
-
-BOOL running = TRUE;
-
-static void quit(void);
-
-int main() {
-    int res;
-    if ((res = GFX_Init()) != 0)
-    {
-        return res;
-    }
-    printf("Debug mode detected!\n");
-    initEvents();
-    {
-        event e;
-        e.type = SDL_QUIT;
-        e.handler = quit;
-        registerEvent(&e);
-    }
-    while (running)
-    {
-        pollEvents();
-    }
-    GFX_Cleanup();
-    cleanupEvents();
-    return 0;
-}
-
-static void quit(void)
+typedef struct
 {
-    running = FALSE;
-}
+    uint32_t type;
+    void (*handler)(void);
+    unsigned int id;
+} event;
+
+void initEvents(void);
+void cleanupEvents(void);
+void pollEvents(void);
+unsigned int registerEvent(event *e);
+BOOL unregisterEvent(unsigned int id);
+
+#endif //REDEMU_EVENTS_H

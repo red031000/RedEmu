@@ -1,5 +1,5 @@
 /*
- *  RedEmu - main.c
+ *  RedEmu::GFX - GFX_init.c
  *  Copyright (C) 2020 red031000
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -16,41 +16,49 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "types.h"
-#include "events.h"
 #include "GFX/GFX_init.h"
-#include <stdio.h>
+#include "SDL2/SDL.h"
 
-#define SDL_QUIT 0x100 //can't include SDL.h here, breaks main
+SDL_Window *window = NULL;
+SDL_Renderer *renderer = NULL;
 
-BOOL running = TRUE;
+const int windowHeight = 384;
+const int windowWidth = 256;
 
-static void quit(void);
-
-int main() {
+int GFX_Init(void)
+{
     int res;
-    if ((res = GFX_Init()) != 0)
+    if ((res = SDL_Init(SDL_INIT_VIDEO)) != 0)
     {
         return res;
     }
-    printf("Debug mode detected!\n");
-    initEvents();
+
+    window = SDL_CreateWindow("RedEmu", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
+    if (window == NULL)
     {
-        event e;
-        e.type = SDL_QUIT;
-        e.handler = quit;
-        registerEvent(&e);
+        SDL_Quit();
+        return 1;
     }
-    while (running)
+
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == NULL)
     {
-        pollEvents();
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
     }
-    GFX_Cleanup();
-    cleanupEvents();
     return 0;
 }
 
-static void quit(void)
+void GFX_Cleanup(void)
 {
-    running = FALSE;
+    if (renderer)
+    {
+        SDL_DestroyRenderer(renderer);
+    }
+    if (window)
+    {
+        SDL_DestroyWindow(window);
+    }
+    SDL_Quit();
 }

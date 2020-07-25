@@ -7,22 +7,38 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 
 # Import target "SDL2::SDL2-static" for configuration ""
 set_property(TARGET SDL2::SDL2-static APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
-set_target_properties(SDL2::SDL2-static PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "C"
-  IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined;-mwindows"
-  IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2-static.a"
-  )
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set_target_properties(SDL2::SDL2-static PROPERTIES
+            IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "C"
+            IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined"
+            IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2-static.a"
+            )
+else ()
+    set_target_properties(SDL2::SDL2-static PROPERTIES
+            IMPORTED_LINK_INTERFACE_LANGUAGES_NOCONFIG "C"
+            IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined;-mwindows"
+            IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2-static.a"
+            )
+endif ()
 
 list(APPEND _IMPORT_CHECK_TARGETS SDL2::SDL2-static )
 list(APPEND _IMPORT_CHECK_FILES_FOR_SDL2::SDL2-static "${_IMPORT_PREFIX}/lib/libSDL2-static.a" )
 
 # Import target "SDL2::SDL2" for configuration ""
 set_property(TARGET SDL2::SDL2 APPEND PROPERTY IMPORTED_CONFIGURATIONS NOCONFIG)
-set_target_properties(SDL2::SDL2 PROPERTIES
-  IMPORTED_IMPLIB_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2.dll.a"
-  IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined;-mwindows"
-  IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/bin/SDL2.dll"
-  )
+if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set_target_properties(SDL2::SDL2 PROPERTIES
+            IMPORTED_IMPLIB_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2.dll.a"
+            IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined"
+            IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/bin/SDL2.dll"
+            )
+else ()
+    set_target_properties(SDL2::SDL2 PROPERTIES
+            IMPORTED_IMPLIB_NOCONFIG "${_IMPORT_PREFIX}/lib/libSDL2.dll.a"
+            IMPORTED_LINK_INTERFACE_LIBRARIES_NOCONFIG "m;user32;gdi32;winmm;imm32;ole32;oleaut32;version;uuid;advapi32;setupapi;shell32;dinput8;dxerr8;mingw32;-Wl,--no-undefined;-mwindows"
+            IMPORTED_LOCATION_NOCONFIG "${_IMPORT_PREFIX}/bin/SDL2.dll"
+            )
+endif ()
 
 list(APPEND _IMPORT_CHECK_TARGETS SDL2::SDL2 )
 list(APPEND _IMPORT_CHECK_FILES_FOR_SDL2::SDL2 "${_IMPORT_PREFIX}/lib/libSDL2.dll.a" "${_IMPORT_PREFIX}/bin/SDL2.dll" )

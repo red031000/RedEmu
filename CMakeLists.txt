@@ -6,8 +6,9 @@ set(CMAKE_C_STANDARD 11)
 set(SDL2_DIR ${CMAKE_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 
-add_executable(RedEmu src/main.c)
+add_executable(RedEmu src/main.c src/GFX/GFX_init.c src/events.c src/exception.c)
 target_include_directories(RedEmu PRIVATE include)
+target_link_libraries(RedEmu PRIVATE SDL2::SDL2)
 target_link_libraries(RedEmu PRIVATE SDL2::SDL2main)
 
 add_custom_command(
